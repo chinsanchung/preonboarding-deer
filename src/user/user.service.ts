@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,11 +13,13 @@ import { User } from '../entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private authService: AuthService,
   ) {}
 
   async createUser(createUserDto: CreateUserDto) {
@@ -41,7 +44,7 @@ export class UserService {
     }
   }
 
-  async signIn(signInDto: SignInDto) {
+  async signIn(signInDto: SignInDto): Promise<{ access_token: string }> {
     const { user_id, password } = signInDto;
     const user = await this.userRepository.findOne({ user_id });
 
@@ -49,14 +52,20 @@ export class UserService {
       const loginedAt = new Date();
       user.loginedAt = loginedAt;
       await this.userRepository.save(user);
-      return user;
+      return this.authService.jwtSign(user);
     } else {
       throw new UnauthorizedException('회원 정보가 일치하지 않습니다');
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOneByUserId(user_id: string): Promise<User> {
+    const user = await this.userRepository.findOne({ user_id });
+
+    if (!user) {
+      throw new NotFoundException('유효한 아이디가 아닙니다.');
+    }
+
+    return user;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
