@@ -7,7 +7,7 @@ export class Deer {
   @PrimaryGeneratedColumn()
   deer_name: number;
 
-  @OneToMany((_type) => History, (history) => history.deer, { eager: true })
+  @OneToMany((_type) => History, (history) => history.deer, { eager: true , cascade:true})
   histories: History[];
 
   @ManyToOne((_type) => Area, (area) => area.deers, { eager: false })
