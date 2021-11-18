@@ -22,6 +22,7 @@ import { HistoryModule } from './history/history.module';
       password: process.env.DB_PASS,
       entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
       synchronize: true,
+      legacySpatialSupport: false,
     }),
     UserModule,
     AuthModule,
