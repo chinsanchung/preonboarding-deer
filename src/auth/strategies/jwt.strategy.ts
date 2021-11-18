@@ -19,15 +19,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    const { id, user_id, loginedAt } = payload;
+    const { id, user_id } = payload;
     const user = await this.usersService.findOneByUserId(user_id);
 
-    const tokenLoginedAt = new Date(loginedAt).getTime();
-    const userLoginedAt = new Date(user.loginedAt).getTime();
-
-    if (tokenLoginedAt !== userLoginedAt) {
+    if (!user) {
       throw new UnauthorizedException('올바르지 않은 토큰입니다');
     }
-    return { id, user_id, loginedAt };
+    return { id, user_id };
   }
 }

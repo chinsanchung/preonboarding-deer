@@ -49,9 +49,6 @@ export class UserService {
     const user = await this.userRepository.findOne({ user_id });
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      const loginedAt = new Date();
-      user.loginedAt = loginedAt;
-      await this.userRepository.save(user);
       return this.authService.jwtSign(user);
     } else {
       throw new UnauthorizedException('회원 정보가 일치하지 않습니다');
