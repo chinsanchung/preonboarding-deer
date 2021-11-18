@@ -7,16 +7,16 @@ export class History {
   @PrimaryGeneratedColumn()
   user_deer_name: number;
 
-  @Column({ type: 'point', srid: 4326 })
+  @Column({ type: 'point', srid: 4326, nullable: true })
   use_end_coord: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   use_start_at: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', nullable: true })
   use_end_at: Date;
 
-  @Column()
+  @Column({ nullable: true })
   price: number;
 
   @ManyToOne((_type) => User, (user) => user.histories, { eager: false })
