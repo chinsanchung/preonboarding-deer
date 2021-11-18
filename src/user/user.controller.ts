@@ -15,8 +15,8 @@ export class UserController {
   }
 
   @Post('signin')
-  findOne(@Body() signinDto: SignInDto) {
-    return this.userService.signIn(signinDto);
+  signIn(@Body() signInDto: SignInDto) {
+    return this.userService.signIn(signInDto);
   }
 
   @Patch(':id')
