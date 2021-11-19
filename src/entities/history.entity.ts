@@ -5,7 +5,7 @@ import { User } from './user.entity';
 @Entity()
 export class History {
   @PrimaryGeneratedColumn()
-  user_deer_name: number;
+  history_id: number;
 
   @Column({ type: 'point', srid: 4326, nullable: true })
   use_end_coord: string;
@@ -22,6 +22,9 @@ export class History {
   @ManyToOne((_type) => User, (user) => user.histories, { eager: false })
   user: User;
 
-  @ManyToOne((_type) => Deer, (deer) => deer.histories, { eager: false })
+  @ManyToOne((_type) => Deer, (deer) => deer.histories, {
+    eager: false,
+    onDelete: 'CASCADE',
+  })
   deer: Deer;
 }
