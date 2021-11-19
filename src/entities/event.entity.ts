@@ -6,20 +6,23 @@ export class Event {
   id: number;
 
   @Column()
-  is_use: boolean; //
+  is_use: boolean;
 
   @Column()
-  condition_query: string;
+  condition_field: string;
 
-  @Column({ nullable: true })
-  description: string;
+  @Column()
+  condition_eq: string;
+
+  @Column()
+  condition_value: string;
 
   @Column()
   plus_minus: string;
 
-  @Column()
-  applied_column: string;
-
   @Column({ type: 'double' })
   applied_number: number;
+
+  @Column()
+  condition: string;
 }

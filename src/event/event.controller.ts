@@ -1,17 +1,16 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/auth-guard/jwt-auth.guard';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/entities/user.entity';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/auth-guard/jwt-auth.guard';
 import { CreateEventDto } from './dto/create-event.dto';
 import { EventService } from './event.service';
+import { Event } from '../entities/event.entity';
 
 @Controller('event')
 export class EventController {
-  constructor(private eventService: EventService) {}
+  constructor(private readonly eventService: EventService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
-  async calculateEvents(@GetUser() user: User): Promise<number> {
-    return await this.eventService.calculateEvents(user);
+  @UseGuards(JwtAuthGuard)
+  createEvent(@Body() createEventDto: CreateEventDto): Promise<Event> {
+    return this.eventService.createEvent(createEventDto);
   }
 }

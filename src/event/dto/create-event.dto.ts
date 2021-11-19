@@ -1,25 +1,24 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsString } from 'class-validator';
 
 export class CreateEventDto {
-  @IsNumber()
-  id: number;
-
   @IsBoolean()
-  is_use: number;
+  is_use: boolean;
 
   @IsString()
-  condition_query: string;
+  condition_field: string;
 
   @IsString()
-  @IsOptional()
-  description: string;
+  condition_eq: string;
+
+  @IsString()
+  condition_value: string;
 
   @IsString()
   plus_minus: string;
 
-  @IsString()
-  applied_column: string;
-
   @IsNumber()
   applied_number: number;
+
+  @IsString()
+  condition: string;
 }
