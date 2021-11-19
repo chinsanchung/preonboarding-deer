@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { History } from '../entities/history.entity';
 import { DeerService } from '../deer/deer.service';
 import { User } from '../entities/user.entity';
 import { CreateHistroyDto } from './dto/create-history.dto';
@@ -30,5 +31,18 @@ export class HistoryService {
     } catch (error) {
       throw new InternalServerErrorException();
     }
+  }
+  
+  async getHistoryList(
+    user: User,
+    limit: number,
+    offset: number,
+  ): Promise<{ history: History[]; count: number }> {
+    const [history, count] = await this.historyRepository.findAndCount({
+      where: { user },
+      take: limit,
+      skip: offset,
+    });
+    return { count, history };
   }
 }
