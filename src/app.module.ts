@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { HistoryModule } from './history/history.module';
 import { DeerModule } from './deer/deer.module';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { DeerModule } from './deer/deer.module';
     AuthModule,
     HistoryModule,
     DeerModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],
