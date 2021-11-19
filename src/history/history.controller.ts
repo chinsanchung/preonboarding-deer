@@ -13,7 +13,7 @@ export class HistoryController {
   async createRentalHistory(
     @Body() createHistroyDto: CreateHistroyDto,
     @GetUser() user: User,
-  ) {
+  ): Promise<{ message: string; history_id: number; use_start_at: Date }> {
     const result = await this.historyService.createRentalHistory(
       createHistroyDto,
       user,
