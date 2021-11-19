@@ -15,14 +15,13 @@ export class EventService {
     private eventRepository: EventRepository,
     private deerService: DeerService,
     private historyService: HistoryService,
-    @InjectRepository(HistoryRepository)
-    private historyRepository: HistoryRepository,
+    // private historyRepository: HistoryRepository,
   ) {}
 
   async calculateEvents(user: User): Promise<any> {
     try {
       const result = await this.findEvents();
-      await this.historyService.calculateEvents(user);
+      // await this.historyService.calculateEvents(user);
     } catch (exception) {
       throw new Error(exception);
     }
