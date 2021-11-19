@@ -13,12 +13,10 @@ export class HistoryService {
     private deerService: DeerService,
   ) {}
 
-  user = new User();
-  async createRentalHistory(createHistroyDto: CreateHistroyDto) {
+  async createRentalHistory(createHistroyDto: CreateHistroyDto, user: User) {
     const deer = await this.deerService.findOneById(createHistroyDto.deer_name);
-    this.user.id = 1;
     const history = this.historyRepository.create({
-      user: this.user,
+      user,
       deer,
     });
     try {
