@@ -23,7 +23,7 @@ export class History {
   user: User;
 
   @ManyToOne((_type) => Deer, (deer) => deer.histories, {
-    eager: false,
+    eager: true,
     onDelete: 'CASCADE',
   })
   deer: Deer;

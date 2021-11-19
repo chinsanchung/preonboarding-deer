@@ -26,7 +26,7 @@ export class Area {
   @Column()
   min_price: number;
 
-  @OneToMany((_type) => Deer, (deer) => deer.area, { eager: true })
+  @OneToMany((_type) => Deer, (deer) => deer.area, { eager: false })
   deers: Deer[];
 
   @OneToMany((_type) => Parkingzone, (parkingzone) => parkingzone.area, {
