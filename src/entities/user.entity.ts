@@ -21,9 +21,6 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ type: 'datetime', nullable: true })
-  loginedAt: Date;
-
   @BeforeInsert()
   async hashPassword(): Promise<void> {
     try {
