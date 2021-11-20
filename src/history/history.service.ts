@@ -6,6 +6,7 @@ import { User } from '../entities/user.entity';
 import { CreateHistroyDto } from './dto/create-history.dto';
 import { HistoryRepository } from './history.repository';
 import { UpdateHistroyDto } from './dto/update-history.dto';
+import { EventService } from '../event/event.service';
 
 @Injectable()
 export class HistoryService {
@@ -13,6 +14,7 @@ export class HistoryService {
     @InjectRepository(HistoryRepository)
     private historyRepository: HistoryRepository,
     private deerService: DeerService,
+    private eventSevice: EventService
   ) {}
 
   async createRentalHistory(
@@ -52,10 +54,15 @@ export class HistoryService {
     updateHistroyDto: UpdateHistroyDto,
     user: User,
   ) {
-    return this.historyRepository.updateReturnHistory(
-      id,
-      updateHistroyDto,
-      user,
-    );
+    const { history, sendData } =
+      await this.historyRepository.updateReturnHistory(
+        id,
+        updateHistroyDto,
+        user,
+      );
+    if (sendData) {
+      history.price = await this.eventSevice.calculatePrice(sendData);
+    }
+    return await this.historyRepository.saveHistory(history);
   }
 }
