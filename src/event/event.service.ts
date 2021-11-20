@@ -1,8 +1,14 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventRepository } from './event.repository';
 import { CreateEventDto } from './dto/create-event.dto';
 import { Event } from '../entities/event.entity';
+import { UpdateEventDto } from './dto/update-event.dto';
 
 @Injectable()
 export class EventService {
@@ -51,6 +57,28 @@ export class EventService {
       },
       order: { plus_minus: 'DESC' },
     });
+  }
+
+  async findOneEvent(id: number): Promise<Event> {
+    const event = await this.eventRepository.findOne({ id });
+    if (!event) {
+      throw new NotFoundException('해당 ID의 event가 존재하지 않습니다.');
+    }
+    return event;
+  }
+
+  async updateEvent(
+    id: number,
+    updateEventDto: UpdateEventDto,
+  ): Promise<Event> {
+    const result = await this.findOneEvent(id);
+    result.is_use = updateEventDto.is_use;
+    try {
+      await this.eventRepository.save(result);
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 
   async calculatePrice(data: any): Promise<number> {
