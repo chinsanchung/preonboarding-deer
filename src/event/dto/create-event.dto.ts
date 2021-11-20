@@ -20,5 +20,5 @@ export class CreateEventDto {
   applied_number: number;
 
   @IsString()
-  condition: string;
+  title: string;
 }
