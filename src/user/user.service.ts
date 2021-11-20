@@ -38,7 +38,7 @@ export class UserService {
       return result;
     } catch (error) {
       throw new InternalServerErrorException(
-        '회원 가입에 오류가 발생하였습니다.',
+        '회원 가입에 오류가 발생하였습니다',
       );
     }
   }
@@ -58,7 +58,7 @@ export class UserService {
     const user = await this.userRepository.findOne({ user_id });
 
     if (!user) {
-      throw new NotFoundException('유효한 아이디가 아닙니다.');
+      throw new NotFoundException('유효한 아이디가 아닙니다');
     }
 
     return user;
