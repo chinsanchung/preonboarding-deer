@@ -34,7 +34,7 @@ export class HistoryRepository extends Repository<History> {
     id: number,
     updateHistroyDto: UpdateHistroyDto,
     user: User,
-  ) {
+  ): Promise<{ history: History; sendData?: any }> {
     let sendData: any = {};
     let price = 0;
     const { latitude, longitude } = updateHistroyDto;
@@ -57,7 +57,7 @@ export class HistoryRepository extends Repository<History> {
       price = base_price + min_price * useMin;
     } else {
       history.price = price;
-      return await this.saveHistory(history);
+      return { history };
     }
 
     //환승 30분 이내일때
@@ -99,9 +99,7 @@ export class HistoryRepository extends Repository<History> {
       isInParkingzone: Number(isInParkingzone),
       isInForbiddenArea: Number(isInForbiddenArea),
     };
-    //TODO :: 이벤트 구현 후 주석 제거
-    // history.price = await this.eventSevice(sendData);
-    return await this.saveHistory(history);
+    return { history, sendData };
   }
 
   async checkTransfer(user: User, history: History) {
