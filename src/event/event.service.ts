@@ -12,16 +12,6 @@ export class EventService {
     private eventRepository: EventRepository,
   ) {}
 
-  async calculateEvents(user: User): Promise<any> {
-    try {
-      // const result = await this.findEvents();
-      // await this.historyService.calculateEvents(user);
-    } catch (exception) {
-      throw new Error(exception);
-    }
-    return null;
-  }
-
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {
     return await this.eventRepository.save({ ...createEventDto });
   }
