@@ -17,12 +17,30 @@ export class EventService {
     private eventRepository: EventRepository,
   ) {}
 
+  checkConditionValidate(condition: string): boolean {
+    /**
+     * 1. 처음은 무조건 영어(변수명)으로 시작합니다. 이벤트 대상은 "가격", "지역 아이디", "이용 시간", "지역에 주차", "주차장에 주차", "금지구역 주차"으로 고정합니다.
+     * 그 다음 반드시 띄어쓰기를 합니다.(\s)
+     * 2. 연산자는 >=, >, <=, <, ==, != 만 가능합니다.
+     * 그 다음 반드시 띄어쓰기를 합니다.(\s)
+     * 3. 마지막은 반드시 숫자로 끝맺습니다.
+     */
+    const regex =
+      /^(price|deer.area.area_id|useMin|isInArea|isInParkingzone|isInForbiddenArea)\s(>=|>|<=|<|==|!=)\s[0-9]+$/;
+    if (condition.match(regex)) {
+      return true;
+    }
+    return false;
+  }
+
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {
     if (!this.condtitionEqValidator(createEventDto.condition_eq)) {
       throw new BadRequestException('condition_eq가 잘못 되었습니다.');
     }
     const condition = this.createEventContdition(createEventDto);
-    //나중에 condition 유효성 체크 추가
+    if (!this.checkConditionValidate(condition)) {
+      throw new BadRequestException('올바르지 않은 요청입니다.');
+    }
     return await this.eventRepository.save({ ...createEventDto, condition });
   }
 
@@ -37,9 +55,9 @@ export class EventService {
   }
 
   condtitionEqValidator(condition_eq: string): boolean {
-    const operatorList = ['>', '<', '==', '>=', '<='];
+    const operatorList = ['>', '<', '==', '>=', '<=', '!='];
 
-    if (operatorList.includes(condition_eq)) {
+    if (!operatorList.includes(condition_eq)) {
       return true;
     }
 
@@ -95,21 +113,5 @@ export class EventService {
       }
     }
     return price;
-  }
-
-  checkConditionValidate(condition: string): boolean {
-    /**
-     * 1. 처음은 무조건 영어(변수명)으로 시작합니다. 이벤트 대상은 "가격", "지역 아이디", "킥보드 브랜드", "지역에 주차", "주차장에 주차", "금지구역 주차"으로 고정합니다.
-     * 그 다음 반드시 띄어쓰기를 합니다.(\s)
-     * 2. 연산자는 >=, >, <=, <, ==, != 만 가능합니다.
-     * 그 다음 반드시 띄어쓰기를 합니다.(\s)
-     * 3. 마지막은 반드시 숫자로 끝맺습니다.
-     */
-    const regex =
-      /^(price|deer.area.area_id|deer.brand|useMin|isInArea|isInParkingzone|isInForbiddenArea)\s(>=|>|<=|<|==|!=)\s[0-9]+$/;
-    if (condition.match(regex)) {
-      return true;
-    }
-    return false;
   }
 }
