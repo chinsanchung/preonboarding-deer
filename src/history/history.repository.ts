@@ -22,6 +22,14 @@ export class HistoryRepository extends Repository<History> {
     return history;
   }
 
+  async saveHistory(history: History): Promise<History> {
+    try {
+      return await this.save(history);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
   async updateReturnHistory(
     id: number,
     updateHistroyDto: UpdateHistroyDto,
@@ -49,7 +57,7 @@ export class HistoryRepository extends Repository<History> {
       price = base_price + min_price * useMin;
     } else {
       history.price = price;
-      return await this.save(history);
+      return await this.saveHistory(history);
     }
 
     //환승 30분 이내일때
@@ -93,11 +101,7 @@ export class HistoryRepository extends Repository<History> {
     };
     //TODO :: 이벤트 구현 후 주석 제거
     // history.price = await this.eventSevice(sendData);
-    try {
-      return await this.save(history);
-    } catch (error) {
-      throw new InternalServerErrorException();
-    }
+    return await this.saveHistory(history);
   }
 
   async checkTransfer(user: User, history: History) {
