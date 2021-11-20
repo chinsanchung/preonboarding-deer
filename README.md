@@ -107,7 +107,22 @@ forbidden_area_coords (반납금지구역의 경계를 표시하는 위도, 경�
 ![디어코퍼레이션 ERD](https://user-images.githubusercontent.com/57168321/142719190-3f0dda31-26b1-4aef-8cd1-49750ed7ae34.PNG)
 
 ---
+## 초기 데이터
 
+최대한 실제와 비슷한 환경을 만들기 위해서 실제 지역의 좌표를 구해 지역 POLYGON 데이터를 구성하였습니다.
+
+
+| 개포동 | 논현동 | 대치동 | 도곡동 | 삼성동 |
+| :----: | :----: | :----: | :----: | :----: |
+| ![image](https://user-images.githubusercontent.com/42320464/142741535-6540a6e6-52dc-4ad2-9df0-8743c6e53308.png)       |![image](https://user-images.githubusercontent.com/42320464/142741641-4fa897b6-a8ae-429d-bfec-88176571aeb3.png)       | ![image](https://user-images.githubusercontent.com/42320464/142741671-4dd66d28-94ff-47c2-8e7f-4ac8984bd071.png)       | ![image](https://user-images.githubusercontent.com/42320464/142741733-14f40665-30dd-4e07-95bd-0d93b4b5c670.png)     | ![image](https://user-images.githubusercontent.com/42320464/142741756-7d210ae8-fdac-464d-99df-0e0e1058a82c.png)       |
+
+| 세곡동 | 수서동 | 신사동 | 압구정동 | 역삼동 |
+| :----: | :----: | :----: | :------: | :----: |
+| ![image](https://user-images.githubusercontent.com/42320464/142741792-ddf53b90-0a3a-4c11-a0f0-bf0863598a80.png)       |  ![image](https://user-images.githubusercontent.com/42320464/142741807-d99b41fb-4233-4117-8526-8651d2d2872b.png)      |  ![image](https://user-images.githubusercontent.com/42320464/142741827-6defbd3d-83b2-4e13-8d87-23474ef7526b.png)      | ![image](https://user-images.githubusercontent.com/42320464/142741844-1297d005-7329-4f67-9564-20bc711a3b67.png)         | ![image](https://user-images.githubusercontent.com/42320464/142741855-c4457fc3-18bc-4ccd-b3f1-28e778be7156.png)       |
+
+
+
+---
 ## 구현 기능
 
 ### 회원가입
