@@ -5,6 +5,7 @@ import { DeerService } from '../deer/deer.service';
 import { User } from '../entities/user.entity';
 import { CreateHistroyDto } from './dto/create-history.dto';
 import { HistoryRepository } from './history.repository';
+import { UpdateHistroyDto } from './dto/update-history.dto';
 
 @Injectable()
 export class HistoryService {
@@ -32,7 +33,7 @@ export class HistoryService {
       throw new InternalServerErrorException();
     }
   }
-  
+
   async getHistoryList(
     user: User,
     limit: number,
@@ -44,5 +45,17 @@ export class HistoryService {
       skip: offset,
     });
     return { count, history };
+  }
+
+  async updateReturnHistory(
+    id: number,
+    updateHistroyDto: UpdateHistroyDto,
+    user: User,
+  ) {
+    return this.historyRepository.updateReturnHistory(
+      id,
+      updateHistroyDto,
+      user,
+    );
   }
 }
