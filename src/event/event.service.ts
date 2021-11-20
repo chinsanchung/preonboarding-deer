@@ -57,7 +57,7 @@ export class EventService {
   condtitionEqValidator(condition_eq: string): boolean {
     const operatorList = ['>', '<', '==', '>=', '<=', '!='];
 
-    if (!operatorList.includes(condition_eq)) {
+    if (operatorList.includes(condition_eq)) {
       return true;
     }
 
