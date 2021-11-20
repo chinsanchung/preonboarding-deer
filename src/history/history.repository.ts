@@ -32,17 +32,24 @@ export class HistoryRepository extends Repository<History> {
     const { latitude, longitude } = updateHistroyDto;
 
     const use_end_at = new Date();
+
     const history = await this.historyFindOne(id, user);
+
     if (history.use_end_at) {
       throw new BadRequestException('이미 반납된 요청입니다.');
     }
+
+    history.use_end_at = use_end_at;
 
     const { base_price, min_price } = history.deer.area;
     const useMin = this.getTimeDiff(history.use_start_at, use_end_at);
 
     //사용시간 1분 이상일때
-    if (useMin > 1) {
+    if (useMin >= 1) {
       price = base_price + min_price * useMin;
+    } else {
+      history.price = price;
+      return await this.save(history);
     }
 
     //환승 30분 이내일때
@@ -51,7 +58,6 @@ export class HistoryRepository extends Repository<History> {
     }
 
     history.price = price;
-    history.use_end_at = use_end_at;
 
     const historyQuery = await this.createQueryBuilder('history')
       .where('history_id = :id', { id })
@@ -81,14 +87,15 @@ export class HistoryRepository extends Repository<History> {
     sendData = {
       ...history,
       useMin,
-      isInArea,
-      isInParkingzone,
-      isInForbiddenArea,
+      isInArea: Number(isInArea),
+      isInParkingzone: Number(isInParkingzone),
+      isInForbiddenArea: Number(isInForbiddenArea),
     };
     //TODO :: 이벤트 구현 후 주석 제거
     // history.price = await this.eventSevice(sendData);
     try {
-      return await this.save(history);
+      await this.save(history);
+      return sendData;
     } catch (error) {
       throw new InternalServerErrorException();
     }
