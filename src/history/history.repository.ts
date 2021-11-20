@@ -94,8 +94,7 @@ export class HistoryRepository extends Repository<History> {
     //TODO :: 이벤트 구현 후 주석 제거
     // history.price = await this.eventSevice(sendData);
     try {
-      await this.save(history);
-      return sendData;
+      return await this.save(history);
     } catch (error) {
       throw new InternalServerErrorException();
     }
