@@ -149,13 +149,13 @@ forbidden_area_coords (반납금지구역의 경계를 표시하는 위도, 경�
 
 <!-- TODO -->
 
-API 테스트를 위한 방법을 [POSTMAN document]()에서 확인하실 수 있습니다.
+API 테스트를 위한 방법을 [POSTMAN document](https://documenter.getpostman.com/view/15323948/UVJWqKhp)에서 확인하실 수 있습니다.
 
 ## 배포
 
 <!-- TODO -->
 
-Heroku를 이용해 배포를 진행했으며, 사이트의 주소는 []() 입니다.
+Heroku를 이용해 배포를 진행했으며, 사이트의 주소는 [https://pocky-deer-subject.herokuapp.com/](https://pocky-deer-subject.herokuapp.com/) 입니다.
 
 ## 설치 및 실행 방법
 
@@ -172,8 +172,78 @@ Heroku를 이용해 배포를 진행했으며, 사이트의 주소는 []() 입�
 1. POST `localhost:3000/user/signin`에 `user_id`, `password`을 입력하신 후 결과값으로 accessToken을 발급받습니다.
 1. 대여나 반납 등 권한이 필요한 API의 주소를 입력한 후, Headers 의 Authorization에 accessToken을 붙여넣어 권한을 얻은 후 API를 호출합니다.
 
-## 테스트
-
-![image]()
 
 ## 폴더 구조
+```
++---src
+|   |   app.controller.spec.ts
+|   |   app.controller.ts
+|   |   app.module.ts
+|   |   app.service.ts
+|   |   main.ts
+|   |
+|   +---auth
+|   |   |   auth.module.ts
+|   |   |   auth.service.ts
+|   |   |   get-user.decorator.ts
+|   |   |
+|   |   +---auth-guard
+|   |   |       jwt-auth.guard.ts
+|   |   |
+|   |   \---strategies
+|   |           jwt.strategy.ts
+|   |
+|   +---deer
+|   |       deer.module.ts
+|   |       deer.service.ts
+|   |
+|   +---entities
+|   |       area.entity.ts
+|   |       deer.entity.ts
+|   |       event.entity.ts
+|   |       forbidden_area.entity.ts
+|   |       history.entity.ts
+|   |       parkingzone.entity.ts
+|   |       user.entity.ts
+|   |
+|   +---event
+|   |   |   event.controller.ts
+|   |   |   event.module.ts
+|   |   |   event.repository.ts
+|   |   |   event.service.ts
+|   |   |
+|   |   \---dto
+|   |           create-event.dto.ts
+|   |           update-event.dto.ts
+|   |
+|   +---history
+|   |   |   history.controller.ts
+|   |   |   history.module.ts
+|   |   |   history.repository.ts
+|   |   |   history.service.ts
+|   |   |
+|   |   \---dto
+|   |           create-history.dto.ts
+|   |           query-history.dto.ts
+|   |           update-history.dto.ts
+|   |
+|   \---user
+|       |   user.controller.ts
+|       |   user.module.ts
+|       |   user.service.spec.ts
+|       |   user.service.ts
+|       |
+|       \---dto
+|               create-user.dto.ts
+|               sign-in.dto.ts
+|   .eslintrc.js
+|   .gitignore
+|   .prettierrc
+|   nest-cli.json
+|   package-lock.json
+|   package.json
+|   Procfile
+|   README.md
+|   tsconfig.build.json
+|   tsconfig.json
+```
