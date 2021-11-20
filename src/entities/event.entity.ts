@@ -6,6 +6,9 @@ export class Event {
   id: number;
 
   @Column()
+  title: string;
+
+  @Column()
   is_use: boolean;
 
   @Column()
