@@ -15,7 +15,11 @@ export class EventService {
     return await this.eventRepository.save({ ...createEventDto });
   }
 
-  async eventGetList(): Promise<Event[]> {
+  async eventAllList(): Promise<Event[]> {
+    return await this.eventRepository.find();
+  }
+
+  async eventConditionList(): Promise<Event[]> {
     return await this.eventRepository.find({
       where: {
         is_use: 1,
@@ -25,7 +29,7 @@ export class EventService {
   }
 
   async calculatePrice(data: any): Promise<number> {
-    const eventList = await this.eventGetList();
+    const eventList = await this.eventConditionList();
     let price = data.price;
     for (const el of eventList) {
       const ifConditon = `data.${el.condition}`;
