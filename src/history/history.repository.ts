@@ -1,25 +1,24 @@
-import { History } from '../entities/history.entity';
 import { EntityRepository, IsNull, Not, Repository } from 'typeorm';
-import { UpdateHistroyDto } from './dto/update-history.dto';
-import { User } from '../entities/user.entity';
-import * as moment from 'moment-timezone';
 import {
   BadRequestException,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { utcToZonedTime } from 'date-fns-tz';
+import { differenceInMinutes } from 'date-fns';
+import { History } from '../entities/history.entity';
+import { UpdateHistroyDto } from './dto/update-history.dto';
+import { User } from '../entities/user.entity';
 
 @EntityRepository(History)
 export class HistoryRepository extends Repository<History> {
-  async historyFindOne(id: number, user: User): Promise<History> {
-    const history = await this.findOne({
-      history_id: id,
-      user,
-    });
-    if (!history) {
+  async findOneHistory(id: number, user: User): Promise<History> {
+    try {
+      const history = await this.findOneOrFail({ history_id: id, user });
+      return history;
+    } catch (err) {
       throw new NotFoundException('유효한 요청이 아닙니다.');
     }
-    return history;
   }
 
   async saveHistory(history: History): Promise<History> {
@@ -28,6 +27,30 @@ export class HistoryRepository extends Repository<History> {
     } catch (error) {
       throw new InternalServerErrorException();
     }
+  }
+
+  getTimeDiff(start_at: Date, end_at: Date) {
+    return differenceInMinutes(end_at, start_at);
+  }
+
+  async checkTransfer(user: User, history: History) {
+    const previousHistory = await this.findOne({
+      where: {
+        user,
+        use_end_at: Not(IsNull()),
+      },
+      order: {
+        history_id: 'DESC',
+      },
+    });
+
+    if (!previousHistory) {
+      return false;
+    }
+
+    return (
+      this.getTimeDiff(history.use_start_at, previousHistory.use_end_at) <= 30
+    );
   }
 
   async updateReturnHistory(
@@ -39,9 +62,9 @@ export class HistoryRepository extends Repository<History> {
     let price = 0;
     const { latitude, longitude } = updateHistroyDto;
 
-    const use_end_at = new Date();
+    const use_end_at = utcToZonedTime(new Date(), 'Asia/Seoul');
 
-    const history = await this.historyFindOne(id, user);
+    const history = await this.findOneHistory(id, user);
 
     if (history.use_end_at) {
       throw new BadRequestException('이미 반납된 요청입니다.');
@@ -100,32 +123,5 @@ export class HistoryRepository extends Repository<History> {
       isInForbiddenArea: Number(isInForbiddenArea),
     };
     return { history, sendData };
-  }
-
-  async checkTransfer(user: User, history: History) {
-    const previousHistory = await this.findOne({
-      where: {
-        user,
-        use_end_at: Not(IsNull()),
-      },
-      order: {
-        history_id: 'DESC',
-      },
-    });
-
-    if (!previousHistory) {
-      return false;
-    }
-
-    return (
-      this.getTimeDiff(history.use_start_at, previousHistory.use_end_at) <= 30
-    );
-  }
-
-  getTimeDiff(start_at, end_at) {
-    const use_start_at = moment(start_at).tz('Asia/Seoul');
-    const use_end_at = moment(end_at).tz('Asia/Seoul');
-
-    return use_end_at.diff(use_start_at, 'minutes');
   }
 }
